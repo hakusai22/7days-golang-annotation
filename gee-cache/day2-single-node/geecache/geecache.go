@@ -6,6 +6,11 @@ import (
 	"sync"
 )
 
+var (
+	mu     sync.RWMutex //读写锁
+	groups = make(map[string]*Group)
+)
+
 // Group 是 GeeCache 最核心的数据结构，负责与用户的交互，并且控制缓存值存储和获取的流程。
 // 一个 Group 可以认为是一个缓存的命名空间，每个 Group 拥有一个唯一的名称 name。
 type Group struct {
@@ -28,12 +33,7 @@ func (f GetterFunc) Get(key string) ([]byte, error) {
 	return f(key)
 }
 
-var (
-	mu     sync.RWMutex
-	groups = make(map[string]*Group)
-)
-
-// NewGroup create a new instance of Group
+// NewGroup 创建一个新的组实例
 func NewGroup(name string, cacheBytes int64, getter Getter) *Group {
 	if getter == nil {
 		panic("nil Getter")
@@ -49,8 +49,7 @@ func NewGroup(name string, cacheBytes int64, getter Getter) *Group {
 	return g
 }
 
-// GetGroup returns the named group previously created with NewGroup, or
-// nil if there's no such group.
+// GetGroup 返回先前使用 NewGroup 创建的命名组，如果没有这样的组，则返回 nil。
 func GetGroup(name string) *Group {
 	mu.RLock()
 	g := groups[name]
@@ -58,7 +57,7 @@ func GetGroup(name string) *Group {
 	return g
 }
 
-// Get value for a key from cache
+// Get 来自缓存的键的值
 func (g *Group) Get(key string) (ByteView, error) {
 	if key == "" {
 		return ByteView{}, fmt.Errorf("key is required")

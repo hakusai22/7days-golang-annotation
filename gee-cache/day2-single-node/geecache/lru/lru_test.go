@@ -11,6 +11,7 @@ func (d String) Len() int {
 	return len(d)
 }
 
+// 测试get方法
 func TestGet(t *testing.T) {
 	lru := New(int64(0), nil)
 	lru.Add("key1", String("1234"))
@@ -22,7 +23,8 @@ func TestGet(t *testing.T) {
 	}
 }
 
-func TestRemoveoldest(t *testing.T) {
+// 测试删除最老的一个元素.
+func TestRemoveOldest(t *testing.T) {
 	k1, k2, k3 := "key1", "key2", "k3"
 	v1, v2, v3 := "value1", "value2", "v3"
 	cap := len(k1 + k2 + v1 + v2)
@@ -58,8 +60,9 @@ func TestAdd(t *testing.T) {
 	lru := New(int64(0), nil)
 	lru.Add("key", String("1"))
 	lru.Add("key", String("111"))
-
-	if lru.nbytes != int64(len("key")+len("111")) {
-		t.Fatal("expected 6 but got", lru.nbytes)
+	t.Log("lru: ", lru)
+	t.Log("lru len: ", lru.Len())
+	if lru.nBytes != int64(len("key")+len("111")) {
+		t.Fatal("expected 6 but got", lru.nBytes)
 	}
 }

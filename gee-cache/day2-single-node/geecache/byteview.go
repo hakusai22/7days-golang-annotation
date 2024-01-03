@@ -11,12 +11,12 @@ func (v ByteView) Len() int {
 	return len(v.b)
 }
 
-// ByteSlice returns a copy of the data as a byte slice.
+// ByteSlice 以字节切片的形式返回数据的副本。
 func (v ByteView) ByteSlice() []byte {
 	return cloneBytes(v.b)
 }
 
-// String returns the data as a string, making a copy if necessary.
+// String 以字符串形式返回数据，必要时进行复制。
 func (v ByteView) String() string {
 	return string(v.b)
 }

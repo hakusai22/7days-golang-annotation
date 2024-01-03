@@ -24,7 +24,9 @@ func TestGetter(t *testing.T) {
 	}
 }
 
+// 测试 get方法
 func TestGet(t *testing.T) {
+	log.Println("len(db): ", len(db))
 	loadCounts := make(map[string]int, len(db))
 	gee := NewGroup("scores", 2<<10, GetterFunc(
 		func(key string) ([]byte, error) {
